@@ -13,7 +13,7 @@ function loadYellowVideo() {
     yellowVideo.style.position = 'absolute';
     yellowVideo.style.top = '0px';
     yellowVideo.style.left = '0px';
-    yellowVideo.style.display = 'none';
+    yellowVideo.style.display = 'block';
     yellowVideo.src = yellowVideoUrl;
     yellowVideo.load();
     document.body.appendChild(yellowVideo);
