@@ -23,6 +23,8 @@ function loadYellowVideo() {
     output.appendChild(yellowVideoDiv);
     yellowVideoDiv.appendChild(yellowVideo);
 }
+
+loadYellowVideo();
  
 navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     .then(stream => {
