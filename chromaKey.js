@@ -23,7 +23,7 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     })
     .catch(err => console.error(err));
 
-    let yellowVideoDrawn = false;
+    let yellowVideoDrawn = false; 
 
     function loop() {
         ctx.clearRect(0, 0, output.width, output.height);
@@ -42,7 +42,7 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
         });
     
         // Hide the yellow video outside of the yellow rectangles
-        if (!rect.some(r => r.x <= mouseX && mouseX <= r.x + r.width && r.y <= mouseY && mouseY <= r.y + r.height)) {
+        if (!yellowRects.some(r => r.x <= mouseX && mouseX <= r.x + r.width && r.y <= mouseY && mouseY <= r.y + r.height)) {
             yellowVideo.style.display = 'none';
         }
     
