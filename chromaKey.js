@@ -1,9 +1,8 @@
 const webcam = document.getElementById('webcam');
-const video = document.getElementById('video');
 const output = document.getElementById('output');
 const ctx = output.getContext('2d');
 
-const yellowVideo = document.getElementById('yellow-video');
+const yellowVideo = document.getElementById('video');
 const yellowVideoUrl = 'test.mp4';
 
 function loadYellowVideo() {
