@@ -25,14 +25,13 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
 
     let yellowVideoDrawn = false;
 
-function loop() {
-    ctx.clearRect(0, 0, output.width, output.height);
-    ctx.drawImage(webcam, 0, 0, output.width, output.height);
-
-    let yellowRects = detectYellow(output, ctx);
-
-    // Draw the yellow video within the detected yellow rectangles only once
-    if (!yellowVideoDrawn) {
+    function loop() {
+        ctx.clearRect(0, 0, output.width, output.height);
+        ctx.drawImage(webcam, 0, 0, output.width, output.height);
+    
+        let yellowRects = detectYellow(output, ctx);
+    
+        // Draw the yellow video within the detected yellow rectangles only
         yellowRects.forEach(rect => {
             yellowVideo.style.left = rect.x + 'px';
             yellowVideo.style.top = rect.y + 'px';
@@ -41,11 +40,14 @@ function loop() {
             yellowVideo.style.display = 'block';
             yellowVideo.play();
         });
-        yellowVideoDrawn = true;
+    
+        // Hide the yellow video outside of the yellow rectangles
+        if (!rect.some(r => r.x <= mouseX && mouseX <= r.x + r.width && r.y <= mouseY && mouseY <= r.y + r.height)) {
+            yellowVideo.style.display = 'none';
+        }
+    
+        requestAnimationFrame(loop);
     }
-
-    requestAnimationFrame(loop);
-}
     
     function detectYellow(canvas, ctx) {
         let yellowRects = [];
