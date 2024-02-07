@@ -44,7 +44,7 @@
             yellowVideo.currentTime = (yellowAreaPercentage * yellowVideo.duration) / 100;
         }
 
-        navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
             .then(stream => {
                 video.srcObject = stream;
                 setInterval(drawVideo, 1000 / 30); // 30 FPS
