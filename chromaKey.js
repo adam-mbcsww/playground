@@ -52,7 +52,7 @@ function loop() {
 
     // Hide the yellow video outside of the yellow rectangles
     if (!yellowRects.some(r => r.x <= mouseX && mouseX <= r.x + r.width && r.y <= mouseY && mouseY <= r.y + r.height)) {
-        yellowVideo.style.display = 'none';
+        yellowVideo.style.display = 'block';
     }
 
     requestAnimationFrame(loop);
