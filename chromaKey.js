@@ -6,9 +6,17 @@ const yellowVideo = document.getElementById('video');
 const yellowVideoUrl = 'test.mp4';
 
 function loadYellowVideo() {
+    const yellowVideo = document.createElement('video');
+    yellowVideo.id = 'video';
+    yellowVideo.width = 0;
+    yellowVideo.height = 0;
+    yellowVideo.style.position = 'absolute';
+    yellowVideo.style.top = '0px';
+    yellowVideo.style.left = '0px';
+    yellowVideo.style.display = 'none';
     yellowVideo.src = yellowVideoUrl;
     yellowVideo.load();
-    yellowVideo.style.display = 'none';
+    document.body.appendChild(yellowVideo);
 }
 
 loadYellowVideo();
@@ -23,7 +31,7 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     })
     .catch(err => console.error(err));
 
-    let yellowVideoDrawn = false; 
+let yellowVideoDrawn = false; 
 
 
     function loop() {
