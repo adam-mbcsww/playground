@@ -11,8 +11,6 @@ function loadYellowVideo() {
     yellowVideo.width = 0;
     yellowVideo.height = 0;
     yellowVideo.style.position = 'absolute';
-    yellowVideo.style.top = '0px';
-    yellowVideo.style.left = '0px';
     yellowVideo.style.display = 'inline-block';
     yellowVideo.src = yellowVideoUrl;
     yellowVideo.load();
@@ -25,9 +23,7 @@ function loadYellowVideo() {
     output.appendChild(yellowVideoDiv);
     yellowVideoDiv.appendChild(yellowVideo);
 }
-
-loadYellowVideo();
-
+ 
 navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     .then(stream => {
         webcam.srcObject = stream;
@@ -56,20 +52,12 @@ function loop() {
         height = Math.max(height, rect.y + rect.height);
     });
 
-    // Position and size the yellow video element relative to the bounding box
+    // Position and size the yellow video div relative to the bounding box
     let yellowVideoDiv = output.querySelector('#video').parentElement;
     yellowVideoDiv.style.left = x + 'px';
     yellowVideoDiv.style.top = y + 'px';
     yellowVideoDiv.style.width = (width - x) + 'px';
     yellowVideoDiv.style.height = (height - y) + 'px';
-
-    // Draw the yellow video within the yellow rectangles only
-    yellowRects.forEach(rect => {
-        ctx.save();
-        ctx.translate(rect.x, rect.y);
-        ctx.drawImage(yellowVideo, 0, 0, rect.width, rect.height);
-        ctx.restore();
-    });
 
     requestAnimationFrame(loop);
 }
