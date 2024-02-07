@@ -13,16 +13,21 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     })
     .catch(err => console.error(err));
     
+    let videoDrawn = false;
+
     function loop() {
         ctx.clearRect(0, 0, output.width, output.height);
         ctx.drawImage(webcam, 0, 0, output.width, output.height);
     
         let yellowRects = detectYellow(output, ctx);
     
-        // Draw the video within the detected yellow rectangles
-        yellowRects.forEach(rect => {
-            ctx.drawImage(video, rect.x, rect.y, rect.width, rect.height);
-        });
+        // Draw the video within the detected yellow rectangles only once
+        if (!videoDrawn) {
+            yellowRects.forEach(rect => {
+                ctx.drawImage(video, rect.x, rect.y, rect.width, rect.height);
+            });
+            videoDrawn = true;
+        }
     
         requestAnimationFrame(loop);
     }
