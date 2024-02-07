@@ -3,6 +3,17 @@ const video = document.getElementById('video');
 const output = document.getElementById('output');
 const ctx = output.getContext('2d');
 
+const yellowVideo = document.getElementById('yellow-video');
+const yellowVideoUrl = 'test.mp4';
+
+function loadYellowVideo() {
+    yellowVideo.src = yellowVideoUrl;
+    yellowVideo.load();
+    yellowVideo.style.display = 'none';
+}
+
+loadYellowVideo();
+
 navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     .then(stream => {
         webcam.srcObject = stream;
@@ -12,25 +23,30 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
         });
     })
     .catch(err => console.error(err));
-    
-    let videoDrawn = false;
 
-    function loop() {
-        ctx.clearRect(0, 0, output.width, output.height);
-        ctx.drawImage(webcam, 0, 0, output.width, output.height);
-    
-        let yellowRects = detectYellow(output, ctx);
-    
-        // Draw the video within the detected yellow rectangles only once
-        if (!videoDrawn) {
-            yellowRects.forEach(rect => {
-                ctx.drawImage(video, rect.x, rect.y, rect.width, rect.height);
-            });
-            videoDrawn = true;
-        }
-    
-        requestAnimationFrame(loop);
+    let yellowVideoDrawn = false;
+
+function loop() {
+    ctx.clearRect(0, 0, output.width, output.height);
+    ctx.drawImage(webcam, 0, 0, output.width, output.height);
+
+    let yellowRects = detectYellow(output, ctx);
+
+    // Draw the yellow video within the detected yellow rectangles only once
+    if (!yellowVideoDrawn) {
+        yellowRects.forEach(rect => {
+            yellowVideo.style.left = rect.x + 'px';
+            yellowVideo.style.top = rect.y + 'px';
+            yellowVideo.style.width = rect.width + 'px';
+            yellowVideo.style.height = rect.height + 'px';
+            yellowVideo.style.display = 'block';
+            yellowVideo.play();
+        });
+        yellowVideoDrawn = true;
     }
+
+    requestAnimationFrame(loop);
+}
     
     function detectYellow(canvas, ctx) {
         let yellowRects = [];
