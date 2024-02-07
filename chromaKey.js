@@ -25,18 +25,19 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
 
     let yellowVideoDrawn = false; 
 
-    let mouseX, mouseY;
-
-output.addEventListener('mousemove', (event) => {
-    mouseX = event.offsetX;
-    mouseY = event.offsetY;
-});
 
     function loop() {
         ctx.clearRect(0, 0, output.width, output.height);
         ctx.drawImage(webcam, 0, 0, output.width, output.height);
     
         let yellowRects = detectYellow(output, ctx);
+        
+        let mouseX, mouseY;
+
+        output.addEventListener('mousemove', (event) => {
+            mouseX = event.offsetX;
+            mouseY = event.offsetY;
+        });
     
         // Draw the yellow video within the detected yellow rectangles only
         yellowRects.forEach(rect => {
