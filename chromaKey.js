@@ -56,12 +56,25 @@ function loop() {
         height = Math.max(height, rect.y + rect.height);
     });
 
-    // Position and size the yellow video element relative to the bounding box
-    let yellowVideoDiv = output.querySelector('#video').parentElement;
-    yellowVideoDiv.style.left = x + 'px';
-    yellowVideoDiv.style.top = y + 'px';
-    yellowVideoDiv.style.width = (width - x) + 'px';
-    yellowVideoDiv.style.height = (height - y) + 'px';
+    // Create a new div for the bounding box and position and size it relative to the bounding box
+    let boundingBoxDiv = document.createElement('div');
+    boundingBoxDiv.style.position = 'absolute';
+    boundingBoxDiv.style.left = x + 'px';
+    boundingBoxDiv.style.top = y + 'px';
+    boundingBoxDiv.style.width = (width - x) + 'px';
+    boundingBoxDiv.style.height = (height - y) + 'px';
+    output.appendChild(boundingBoxDiv);
+
+    // Position and size the yellow video element relative to the bounding box div
+    let yellowVideoDiv = document.createElement('div');
+    yellowVideoDiv.style.position = 'absolute';
+    yellowVideoDiv.style.left = '0px';
+    yellowVideoDiv.style.top = '0px';
+    yellowVideoDiv.style.width = '100%';
+    yellowVideoDiv.style.height = '100%';
+    yellowVideoDiv.style.display = 'inline-block';
+    boundingBoxDiv.appendChild(yellowVideoDiv);
+    yellowVideoDiv.appendChild(yellowVideo);
 
     requestAnimationFrame(loop);
 }
