@@ -34,36 +34,29 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
 let yellowVideoDrawn = false; 
 
 
-    function loop() {
-        ctx.clearRect(0, 0, output.width, output.height);
-        ctx.drawImage(webcam, 0, 0, output.width, output.height);
-    
-        let yellowRects = detectYellow(output, ctx);
-        
-        let mouseX, mouseY;
+function loop() {
+    ctx.clearRect(0, 0, output.width, output.height);
+    ctx.drawImage(webcam, 0, 0, output.width, output.height);
 
-        output.addEventListener('mousemove', (event) => {
-            mouseX = event.offsetX;
-            mouseY = event.offsetY;
-        });
-    
-        // Draw the yellow video within the detected yellow rectangles only
-        yellowRects.forEach(rect => {
-            yellowVideo.style.left = rect.x + 'px';
-            yellowVideo.style.top = rect.y + 'px';
-            yellowVideo.style.width = rect.width + 'px';
-            yellowVideo.style.height = rect.height + 'px';
-            yellowVideo.style.display = 'block';
-            yellowVideo.play();
-        });
-    
-        // Hide the yellow video outside of the yellow rectangles
-        if (!yellowRects.some(r => r.x <= mouseX && mouseX <= r.x + r.width && r.y <= mouseY && mouseY <= r.y + r.height)) {
-            yellowVideo.style.display = 'none';
-        }
-    
-        requestAnimationFrame(loop);
+    let yellowRects = detectYellow(output, ctx);
+
+    // Draw the yellow video within the detected yellow rectangles only
+    yellowRects.forEach(rect => {
+        yellowVideo.style.left = rect.x + 'px';
+        yellowVideo.style.top = rect.y + 'px';
+        yellowVideo.style.width = rect.width + 'px';
+        yellowVideo.style.height = rect.height + 'px';
+        yellowVideo.style.display = 'block';
+        yellowVideo.play();
+    });
+
+    // Hide the yellow video outside of the yellow rectangles
+    if (!yellowRects.some(r => r.x <= mouseX && mouseX <= r.x + r.width && r.y <= mouseY && mouseY <= r.y + r.height)) {
+        yellowVideo.style.display = 'none';
     }
+
+    requestAnimationFrame(loop);
+}
     
     function detectYellow(canvas, ctx) {
         let yellowRects = [];
