@@ -42,11 +42,15 @@ function loop() {
 
     // Draw the yellow video within the detected yellow rectangles only
     yellowRects.forEach(rect => {
-        yellowVideo.style.left = rect.x + 'px';
-        yellowVideo.style.top = rect.y + 'px';
-        yellowVideo.style.width = rect.width + 'px';
-        yellowVideo.style.height = rect.height + 'px';
-        yellowVideo.style.display = 'block';
+        let yellowVideoDiv = document.createElement('div');
+        yellowVideoDiv.style.position = 'absolute';
+        yellowVideoDiv.style.left = rect.x + 'px';
+        yellowVideoDiv.style.top = rect.y + 'px';
+        yellowVideoDiv.style.width = rect.width + 'px';
+        yellowVideoDiv.style.height = rect.height + 'px';
+        yellowVideoDiv.style.display = 'inline-block';
+        yellowVideoDiv.appendChild(yellowVideo);
+        output.appendChild(yellowVideoDiv);
         yellowVideo.play();
     });
 
