@@ -47,14 +47,21 @@ function loop() {
 
     let yellowRects = detectYellow(output, ctx);
 
-    // Update the position and size of the yellow video to match the yellow rectangles
-    let yellowVideoDiv = output.querySelector('#video').parentElement;
+    // Calculate the bounding box of all the yellow rectangles
+    let x = Infinity, y = Infinity, width = 0, height = 0;
     yellowRects.forEach(rect => {
-        yellowVideoDiv.style.left = rect.x + 'px';
-        yellowVideoDiv.style.top = rect.y + 'px';
-        yellowVideoDiv.style.width = rect.width + 'px';
-        yellowVideoDiv.style.height = rect.height + 'px';
+        x = Math.min(x, rect.x);
+        y = Math.min(y, rect.y);
+        width = Math.max(width, rect.x + rect.width);
+        height = Math.max(height, rect.y + rect.height);
     });
+
+    // Position and size the yellow video element relative to the bounding box
+    let yellowVideoDiv = output.querySelector('#video').parentElement;
+    yellowVideoDiv.style.left = x + 'px';
+    yellowVideoDiv.style.top = y + 'px';
+    yellowVideoDiv.style.width = (width - x) + 'px';
+    yellowVideoDiv.style.height = (height - y) + 'px';
 
     requestAnimationFrame(loop);
 }
