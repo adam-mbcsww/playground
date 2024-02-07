@@ -65,6 +65,10 @@ function loop() {
 }
     
 function detectYellow(canvas, ctx) {
+    if (!canvas.willReadFrequently) {
+        canvas.willReadFrequently = true;
+    }
+
     let yellowRects = [];
     let data = ctx.getImageData(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < data.data.length; i += 4) {
@@ -89,13 +93,12 @@ function detectYellow(canvas, ctx) {
 
             // If this pixel is not adjacent to an existing yellow rectangle, create a new one
             if (!adjacentRect) {
-                adjacentRect = { x: x, y: y, width: 1, height: 1 };
-                yellowRects.push(adjacentRect);
+                yellowRects.push({ x: x, y: y, width: 1, height: 1 });
+            } else {
+                // Expand the existing yellow rectangle
+                adjacentRect.width = Math.max(adjacentRect.width, x + 1 - adjacentRect.x);
+                adjacentRect.height = Math.max(adjacentRect.height, y + 1 - adjacentRect.y);
             }
-
-            // Expand the existing yellow rectangle
-            adjacentRect.width = Math.max(adjacentRect.width, x + 1 - adjacentRect.x);
-            adjacentRect.height = Math.max(adjacentRect.height, y + 1 - adjacentRect.y);
         }
     }
 
