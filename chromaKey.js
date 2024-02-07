@@ -53,37 +53,46 @@ function loop() {
     requestAnimationFrame(loop);
 }
     
-    function detectYellow(canvas, ctx) {
-        let yellowRects = [];
-        let data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < data.data.length; i += 4) {
-            let r = data.data[i];
-            let g = data.data[i + 1];
-            let b = data.data[i + 2];
-    
-            // Adjust these values to detect the desired yellow color
-            if (g > 128 && r > 128 && r > g - 64 && b < 80) {
-                let x = (i / 4) % canvas.width;
-                let y = Math.floor((i / 4) / canvas.width);
-    
-                // Create a new yellow rectangle if it doesn't exist yet
-                let yellowRect = yellowRects.find(rect => rect.x === x && rect.y === y);
-                if (!yellowRect) {
-                    yellowRect = { x: x, y: y, width: 1, height: 1 };
-                    yellowRects.push(yellowRect);
-                } else {
-                    // Expand the existing yellow rectangle
-                    yellowRect.width++;
-                    yellowRect.height = Math.max(yellowRect.height, 1);
+function detectYellow(canvas, ctx) {
+    let yellowRects = [];
+    let data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < data.data.length; i += 4) {
+        let r = data.data[i];
+        let g = data.data[i + 1];
+        let b = data.data[i + 2];
+
+        // Adjust these values to detect the desired yellow color
+        if (g > 128 && r > 128 && r > g - 64 && b < 80) {
+            let x = (i / 4) % canvas.width;
+            let y = Math.floor((i / 4) / canvas.width);
+
+            // Check if this pixel is adjacent to an existing yellow rectangle
+            let adjacentRect = false;
+            for (let j = 0; j < yellowRects.length; j++) {
+                let rect = yellowRects[j];
+                if (x >= rect.x && x < rect.x + rect.width && y >= rect.y && y < rect.y + rect.height) {
+                    adjacentRect = rect;
+                    break;
                 }
             }
+
+            // If this pixel is not adjacent to an existing yellow rectangle, create a new one
+            if (!adjacentRect) {
+                adjacentRect = { x: x, y: y, width: 1, height: 1 };
+                yellowRects.push(adjacentRect);
+            }
+
+            // Expand the existing yellow rectangle
+            adjacentRect.width = Math.max(adjacentRect.width, x + 1 - adjacentRect.x);
+            adjacentRect.height = Math.max(adjacentRect.height, y + 1 - adjacentRect.y);
         }
-    
-        // Draw the yellow rectangles for debugging purposes
-        ctx.strokeStyle = 'yellow';
-        yellowRects.forEach(rect => {
-            ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
-        });
-    
-        return yellowRects;
     }
+
+    // Draw the yellow rectangles for debugging purposes
+    ctx.strokeStyle = 'yellow';
+    yellowRects.forEach(rect => {
+        ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+    });
+
+    return yellowRects;
+}
