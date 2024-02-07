@@ -13,10 +13,17 @@ function loadYellowVideo() {
     yellowVideo.style.position = 'absolute';
     yellowVideo.style.top = '0px';
     yellowVideo.style.left = '0px';
-    yellowVideo.style.display = 'block';
+    yellowVideo.style.display = 'inline-block';
     yellowVideo.src = yellowVideoUrl;
     yellowVideo.load();
     document.body.appendChild(yellowVideo);
+
+    const yellowVideoDiv = document.createElement('div');
+    yellowVideoDiv.style.position = 'relative';
+    yellowVideoDiv.style.width = '100%';
+    yellowVideoDiv.style.height = '100%';
+    output.appendChild(yellowVideoDiv);
+    yellowVideoDiv.appendChild(yellowVideo);
 }
 
 loadYellowVideo();
@@ -40,18 +47,13 @@ function loop() {
 
     let yellowRects = detectYellow(output, ctx);
 
-    // Draw the yellow video within the detected yellow rectangles only
+    // Update the position and size of the yellow video to match the yellow rectangles
+    let yellowVideoDiv = output.querySelector('#video').parentElement;
     yellowRects.forEach(rect => {
-        let yellowVideoDiv = document.createElement('div');
-        yellowVideoDiv.style.position = 'absolute';
         yellowVideoDiv.style.left = rect.x + 'px';
         yellowVideoDiv.style.top = rect.y + 'px';
         yellowVideoDiv.style.width = rect.width + 'px';
         yellowVideoDiv.style.height = rect.height + 'px';
-        yellowVideoDiv.style.display = 'inline-block';
-        yellowVideoDiv.appendChild(yellowVideo);
-        output.appendChild(yellowVideoDiv);
-        yellowVideo.play();
     });
 
     requestAnimationFrame(loop);
