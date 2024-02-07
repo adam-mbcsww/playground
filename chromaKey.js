@@ -54,12 +54,29 @@ function loop() {
         height = Math.max(height, rect.y + rect.height);
     });
 
+    // Log the bounding box dimensions for debugging
+    console.log(`Bounding box: x=${x}, y=${y}, width=${width - x}, height=${height - y}`);
+
     // Position and size the yellow video div relative to the bounding box
     let yellowVideoDiv = output.querySelector('#video').parentElement;
     yellowVideoDiv.style.left = x + 'px';
     yellowVideoDiv.style.top = y + 'px';
     yellowVideoDiv.style.width = (width - x) + 'px';
     yellowVideoDiv.style.height = (height - y) + 'px';
+
+    // Log the position and size of the yellow video div for debugging
+    console.log(`Yellow video div: left=${yellowVideoDiv.style.left}, top=${yellowVideoDiv.style.top}, width=${yellowVideoDiv.style.width}, height=${yellowVideoDiv.style.height}`);
+
+    // Draw the yellow video within the yellow rectangles only
+    yellowRects.forEach(rect => {
+        ctx.save();
+        ctx.translate(rect.x, rect.y);
+        ctx.drawImage(yellowVideo, 0, 0, rect.width, rect.height);
+        ctx.restore();
+    });
+
+    // Log the number of yellow rectangles for debugging
+    console.log(`Number of yellow rectangles: ${yellowRects.length}`);
 
     requestAnimationFrame(loop);
 }
